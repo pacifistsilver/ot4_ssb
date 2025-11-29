@@ -1,0 +1,7 @@
+{"stock_conc_mM" : 10,
+ "final_conc_uM" : [0, 5, 10, 50, 100, 500, 1000, 5000],
+ "total_vol_uL" : 100,
+ "diluent": "Buffer",
+ "diluent_vol_uL" : [100, 99.9, 99.5, 99, 95, 90, 50, 0],
+ "stock": "Stock Solution",
+ "stock_vol_uL" : [0, 0.1, 0.5, 1, 5, 10, 50, 100]} 
