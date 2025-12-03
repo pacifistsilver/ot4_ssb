@@ -1,0 +1,68 @@
+{
+    "metadata": {
+        "stock_name": "Stock Solution",
+        "stock_conc_uM": 10.0,
+        "diluent_name": "Buffer",
+        "total_vol_uL": 103.0,
+        "replicates": 3,
+        "labware_directory": ""
+    },
+    "wells": [
+        {
+            "final_conc_uM": 0.0,
+            "stock_vol_uL": 0.0,
+            "diluent_vol_uL": 103.0
+        },
+        {
+            "final_conc_uM": 1.0,
+            "stock_vol_uL": 10.3,
+            "diluent_vol_uL": 92.7
+        },
+        {
+            "final_conc_uM": 2.0,
+            "stock_vol_uL": 20.6,
+            "diluent_vol_uL": 82.4
+        },
+        {
+            "final_conc_uM": 3.0,
+            "stock_vol_uL": 30.9,
+            "diluent_vol_uL": 72.1
+        },
+        {
+            "final_conc_uM": 4.0,
+            "stock_vol_uL": 41.2,
+            "diluent_vol_uL": 61.8
+        },
+        {
+            "final_conc_uM": 5.0,
+            "stock_vol_uL": 51.5,
+            "diluent_vol_uL": 51.5
+        }
+    ],
+    "arrays": {
+        "final_conc_uM": [
+            0.0,
+            1.0,
+            2.0,
+            3.0,
+            4.0,
+            5.0
+        ],
+        "stock_vol_uL": [
+            0.0,
+            10.3,
+            20.6,
+            30.9,
+            41.2,
+            51.5
+        ],
+        "diluent_vol_uL": [
+            103.0,
+            92.7,
+            82.4,
+            72.1,
+            61.8,
+            51.5
+        ]
+    }
+}
