@@ -4,7 +4,7 @@ Dose-Response experiments are notoriously labourious, especially if you are usin
 
 ## Prerequisites
 This project relies on Conda for dependency management and environment isolation. Please ensure you have Anaconda or Miniconda installed on your system
-# Environment Setup
+### Environment Setup
 1. Clone the repo
    ```sh
    git clone https://github.com/pacifistsilver/ot4_ssb.git
