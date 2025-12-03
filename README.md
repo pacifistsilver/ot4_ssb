@@ -1,4 +1,36 @@
 # Automating Dose-Response Experiment Generation using a GUI
 ## Maria AnTronette (OpenTron Team 4)
-### Authors: Agnes Chow, Daniel Luo, Lihao Tao
-### Protocol Description:
+
+## Getting Started
+
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/pacifistsilver/ot4_ssb.git
+   ```
+2. Activate Conda environment
+   ```sh
+   conda env create -f environment.yml
+   ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- USAGE EXAMPLES -->
+## Usage
+blahblah
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT license. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTACT -->
+## Authors
+Code contributed by Agnes Chow, Daniel Luo, Lihao Tao
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
