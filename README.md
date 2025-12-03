@@ -31,5 +31,5 @@ Distributed under the MIT license. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Authors
-Code contributed by Agnes Chow, Daniel Luo, Lihao Tao
+Code contributed by Agnes Cheung, Daniel Luo, Lihao Tao
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
