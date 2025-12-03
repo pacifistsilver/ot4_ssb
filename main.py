@@ -260,21 +260,18 @@ class DilutionApp(QWidget):
 
         # build structure
         data = {
-            "metadata": {
-                "stock_name": self.input_stock_name.text(), # type: ignore
+                "stock": self.input_stock_name.text(), # type: ignore
                 "stock_conc_uM": self.input_stock_conc.value(), # type: ignore
-                "diluent_name": self.input_diluent_name.text(), # type: ignore
+                "diluent": self.input_diluent_name.text(), # type: ignore
                 "total_vol_uL": self.input_total_vol.value(), # type: ignore
                 "replicates": int(self.replicates.value()), # type: ignore
-                "labware_directory": self.labware_path_input.text()
-            },
+                "labware_directory": self.labware_path_input.text(),
             # converts dataclasses to list of dicts or separate arrays
             "wells": [asdict(well) for well in self.experiment_data],
-            "arrays": {
-                "final_conc_uM": [w.final_conc_uM for w in self.experiment_data],
-                "stock_vol_uL": [w.stock_vol_uL for w in self.experiment_data],
-                "diluent_vol_uL": [w.diluent_vol_uL for w in self.experiment_data]
-            }
+            "final_conc_uM": [w.final_conc_uM for w in self.experiment_data],
+            "stock_vol_uL": [w.stock_vol_uL for w in self.experiment_data],
+            "diluent_vol_uL": [w.diluent_vol_uL for w in self.experiment_data]
+            
         }
 
         # dump data json to ui and file  
