@@ -1,5 +1,6 @@
 # Automating Dose-Response Experiment Generation using a GUI
-## Maria AnTronette (OpenTron Team 4)
+## Introduction
+Dose-Response experiments are notoriously labourious, especially if you are using 96 well plates plus replicates. So the main question we answer is thus: how can we automate this and make it as simple as possible for the end-user?  
 
 ## Getting Started
 To get a local copy up and running follow these simple steps.
