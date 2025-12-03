@@ -1,0 +1,72 @@
+1. GUI Script
+METHOD CreateSetUp:
+    DEFINE stock name widget
+    DEFINE stock concentration widget
+    DEFINE diluent name widget
+    DEFINE total well volume widget
+    DEFINE target concentration widget
+    DEFINE replicates widget
+    DEFINE calculations widget
+
+METHOD CreateTable:
+    DEFINE table widget
+    DEFINE data = CalculateAndPopulate()
+    SET Table[0] to data[0]
+    SET Table[1] to data[1]
+    SET Table[2] to data[2]
+
+METHOD SetDefaults:
+    DEFINE Input_StockName.Text 
+    DEFINE Input_StockConc.Value 
+    DEFINE Input_TotalVol.Value 
+    DEFINE Input_Targets.Text 
+
+METHOD CalculateAndPopulate:
+    GET stock_conc FROM Input_StockConc
+    GET total_vol FROM Input_TotalVol
+    GET target_list FROM Input_Targets (split by comma)
+
+    IF stock_conc <= 0:
+        RETURN Error "Stock concentration must be > 0"
+
+    CLEAR Table
+    
+    FOR EACH target_conc IN target_list:
+        // C1V1 = C2V2 Formula
+        // V1 = (C2 * V2) / C1
+        COMPUTE stock_vol = (target_conc * total_vol) / stock_conc
+        COMPUTE diluent_vol = total_vol - stock_vol
+
+        IF stock_vol > total_vol:
+            SHOW Warning "Target requires more stock than total volume"
+
+        ADD ROW to Table with (target_conc, stock_vol, diluent_vol)
+
+METHOD GenerateJSON:
+    INITIALISE data_structure:
+        DEFINE stock_conc = Input_StockConc.Value
+        DEFINE stock_name = Input_StockName.Text
+        DEFINE arrays = [final_conc], [stock_vol], [diluent_vol]
+
+    FOR EACH row IN Table:
+        READ cell_conc, cell_stock, cell_diluent
+        APPEND values to data_structure.arrays
+
+    CONVERT data_structure TO json_string
+    
+    WRITE json_string TO file_path
+    COPY json_string TO Clipboard
+    SHOW Success Message
+
+2. Opentron Serial Dilution 
+DEFINE p300_multi.flow_rate 
+DEFINE p300_single.flow_rate
+
+CALL opentron.pickup_tip
+FOR EACH col IN SOURCE_PLATE:
+  
+
+3. Opentron Dose-Response
+Opentron add cells or reaction mix 
+Normalise cell density 
+Distribute equal volumes or reaction mix into each well (remember to have control and blanking) 
