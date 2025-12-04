@@ -111,6 +111,8 @@ def run(protocol: protocol_api.ProtocolContext):
     #Step 3: Inducer B serial dilution
     for col in range(9, 11):
         p300_single.pick_up_tip()
+        move_liquid(p300_multi, FLOW_VOL["asp_vol"], FLOW_VOL["disp_vol"], reservoir.columns()[current_well_column][0], dest[0], mix_option_args)
+
         p300_single.aspirate(FLOW_VOL["asp_vol"], reservoir.columns()[2][0])
         p300_single.dispense(FLOW_VOL["disp_vol"], source.columns()[col][7])
         p300_single.mix(3, FLOW_VOL["mix_vol"], source.columns()[col][7])
