@@ -27,8 +27,8 @@ DISP_RATE = config.get("disp_rate")
 BLOW_RATE = config.get("blowout_rate")
 LABWARE = {
     'tips': 'opentrons_96_tiprack_300ul', 
-    'reservoir': 'corning_96_wellplate_360ul_flat', 
-    'plate': 'corning_96_wellplate_360ul_flat' 
+    'reservoir': '4ti0136_96_wellplate_2200ul', 
+    'plate': 'costar3370flatbottomtransparent_96_wellplate_200ul' 
 }
 
 FLOW_RATES = {
