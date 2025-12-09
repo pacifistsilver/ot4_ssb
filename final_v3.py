@@ -8,8 +8,34 @@ metadata = {
     'author': 'OT4',
     'apiLevel': '2.14'
 }
-
-# initial dedfault replicate number, labwares, flow_rates, and flow_volume
+CONFIG = {
+    "labware": {
+        "tips_300": "opentrons_96_tiprack_300ul",
+        "plate": "nest_96_wellplate_200ul_flat",
+        "reservoir": "nest_12_reservoir_15ml"
+    },
+    "pipettes": {
+        "multi_loc": "left",
+        "single_loc": "right",
+        "multi_model": "p300_multi_gen2",
+        "single_model": "p300_single_gen2"
+    },
+    "flow_rates": {
+        "p300m_asp": 50,
+        "p300m_disp": 150,
+        "p300m_blow":  150, 
+        "p300s_asp": 50, 
+        "p300s_disp": 100,
+        "p300s_blow": 150
+    },
+    "volumes": {
+        "asp_vol": 300,
+        "disp_vol": 300,
+        "mix_vol": 300
+    },
+    "replicates": 1
+    
+}
 replicates = 1
 LABWARE = [
     "opentrons_96_tiprack_300ul",
@@ -63,13 +89,15 @@ set blow out height higher?
 """
 
 
-# helper function for dilution 
-def move_liquid(pipette, aspiration_vol: int, dispense_vol: int, in_location, out_location, mix_opt:bool = False, mix_vol:int = 300, mix_reps:int = 3):
-    pipette.aspirate(aspiration_vol, in_location)
-    pipette.dispense(dispense_vol, out_location)
-    if mix_opt is True:
-        pipette.mix(mix_reps, mix_vol, out_location)
-    pipette.blow_out(out_location)
+# helper function for liquid moving 
+def move_liquid(pipette: protocol_api.InstrumentContext, aspiration_vol: int, dispense_vol: int, in_location: protocol_api.labware.Well, out_location: protocol_api.labware.Well, rate:float = 1.0, mix_vol:int = 300, mix_reps:int = 0):
+    pipette.aspirate(aspiration_vol, in_location, rate=rate)
+    pipette.dispense(dispense_vol, out_location, rate=rate)
+    if mix_reps > 0:
+            # This prevents trying to mix 300ul when you only transferred 30ul.
+            volume_to_mix = mix_vol if mix_vol else dispense_vol
+            pipette.mix(mix_reps, volume_to_mix, out_location)
+    pipette.blow_out(out_location.top())
 
 def run(protocol: protocol_api.ProtocolContext):
     # labware definitions
@@ -124,44 +152,38 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # 2. inducer A serial dilution
     p300_multi.pick_up_tip()
-    p300_multi.aspirate(FLOW_VOL["asp_vol"], reservoir.columns()[1][0], rate = 0.6) # slow down the aspiration rate to aviod bubbles 
-    p300_multi.dispense(FLOW_VOL["disp_vol"], source.columns()[7][0])
-    p300_multi.mix(3, FLOW_VOL["mix_vol"], source.columns()[7][0])
-    p300_multi.blow_out(source.columns()[7][0])
+    move_liquid(p300_multi, FLOW_VOL["asp_vol"], FLOW_VOL["disp_vol"], reservoir.columns()[1][0], source.columns()[7][0], rate=0.6,mix_reps=3)
     for col in range(7, 0, -1):
         source1 = source.columns()[col][0]
         dest = source.columns()[col-1][0]
-        p300_multi.aspirate(FLOW_VOL["asp_vol"], source1)
-        p300_multi.dispense(FLOW_VOL["disp_vol"], dest, rate = 0.4) # slow down the despensing rate to avoid liquid retension due to liquid viscosity 
-        p300_multi.mix(3, FLOW_VOL["mix_vol"], dest)
-        p300_multi.blow_out(dest)
+        move_liquid(p300_multi, FLOW_VOL["asp_vol"], FLOW_VOL["disp_vol"], source1, dest, rate=0.4,mix_reps=3)
         protocol.comment(f'Moving Inducer A from {source1} to {dest}')
-    p300_multi.aspirate(FLOW_VOL["asp_vol"], source.columns()[0][0]) # remove 100 ul from col 1
-    p300_multi.drop_tip()
+    # discard from col 1
+    p300_multi.aspirate(FLOW_VOL["asp_vol"], source.columns()[0][0]) 
     protocol.comment('Inducer A serial dilution complete')
  
 
     # 3. inducer B serial dilution
-    inducerb_col = 11
+    target_columns = source.columns()[-replicates:]
+    protocol.comment(f'Starting Inducer B dilution on last {replicates} columns.')
 
-    for replicate in range(0, replicates):
+    for col in target_columns:
         p300_single.pick_up_tip()
-        p300_single.aspirate(FLOW_VOL["asp_vol"], reservoir.columns()[2][0], rate = 0.6)
-        p300_single.dispense(FLOW_VOL["disp_vol"], source.columns()[inducerb_col][7])
-        p300_single.mix(3, FLOW_VOL["mix_vol"], source.columns()[inducerb_col][7])
-        p300_single.blow_out(source.columns()[inducerb_col][7])
-        for row in range(7, 0, -1):
-            source1 = source.columns()[inducerb_col][row]
-            dest = source.columns()[inducerb_col][row-1]
-            p300_single.aspirate(FLOW_VOL["asp_vol"], source1)
-            p300_single.dispense(FLOW_VOL["disp_vol"], dest)
-            p300_single.mix(3, FLOW_VOL["mix_vol"], dest)
+        
+        top_well_H = col[7] 
+        bottom_well_A = col[0]
 
-        p300_single.blow_out(dest)
-        p300_single.aspirate(FLOW_VOL["asp_vol"], source.columns()[inducerb_col][0])
+        move_liquid(p300_single, FLOW_VOL["asp_vol"], FLOW_VOL["disp_vol"], reservoir.columns()[2][0], top_well_H, mix_reps=3)
+        
+        for row_index in range(7, 0, -1):
+            source_well = col[row_index]
+            dest_well = col[row_index - 1]
+                        
+            move_liquid(p300_single, FLOW_VOL["asp_vol"], FLOW_VOL["disp_vol"], source_well, dest_well, mix_vol=300, mix_reps=3)
+
+        p300_single.aspirate(FLOW_VOL["asp_vol"], bottom_well_A)
         p300_single.drop_tip()
-        inducerb_col += 1
-
+        
     protocol.comment('Inducer B serial dilution complete')
 
     # destination plate setup
@@ -169,45 +191,25 @@ def run(protocol: protocol_api.ProtocolContext):
     if replicates > 3:
         raise ValueError("replicates > 3. Maximum of 3 replicates and minimum of 1 replicate can be executed in each run. PLEASE ENTER AGAIN.")
 
-    # 1. add PBS to corresponding destination plate col 1
-    # if more replicates are designed, please add their names
-    p300_multi.pick_up_tip()
-    dest1_col_PBS = dest_1.wells_by_name()['A1']
-    #dest2_col_PBS = dest_2.wells_by_name()['A1']
-    p300_multi.aspirate(70, PBS_source) # aspirate a bit more to ensure an accurate amount when dispensing 
-    p300_multi.dispense(30, dest1_col_PBS)
-    #p300_multi.dispense(30, dest2_col_PBS)
-    protocol.comment(f'''PBS added to plate, column 1''')
-    p300_multi.drop_tip()
+    pbs_targets = []
+    inducer_a_targets = []
+    inducer_b_targets = []
     
-    # 2. add stock A to destination plate col 2 (only-A) and col 4 (positive control)
-    p300_multi.pick_up_tip()
-    dest1_col_A_only = dest_1.wells_by_name()['A2']
-    #dest2_col_A_only = dest_2.wells_by_name()['A2']
-    dest1_col_positive = dest_1.wells_by_name()['A4']
-    #dest2_col_positive = dest_2.wells_by_name()['A4']
-
-    p300_multi.aspirate(70, A_source)
-    p300_multi.dispense(30, dest1_col_A_only)
-    #p300_multi.dispense(30, dest2_col_A_only)
-    p300_multi.dispense(30, dest1_col_positive)
-    #p300_multi.dispense(30, dest2_col_positive)
-    p300_multi.drop_tip()
-
-    protocol.comment(f'''Inducer A added to plate (only-A col 2, positive col 4)''')
+    for dest_plate in dest_list:
+        cols = dest_plate.columns()
+        pbs_targets.append(cols[0])           # Col 1
+        inducer_a_targets.extend([cols[1], cols[3]]) # Col 2 & 4
+        inducer_b_targets.extend([cols[2], cols[3]]) # Col 3 & 4
     
-    # 3. add stock B to destination plate col 3 (only-B) and col 4 (positive control)
-    p300_multi.pick_up_tip()
-    dest1_col_B_only = dest_1.wells_by_name()['A3']
-    #dest2_col_B_only = dest_2.wells_by_name()['A3']
-
-    p300_multi.aspirate(70, B_source)
-    p300_multi.dispense(30, dest1_col_B_only)
-    #p300_multi.dispense(30, dest2_col_B_only)
-    p300_multi.dispense(30, dest1_col_positive)
-    #p300_multi.dispense(30, dest2_col_positive)
-    p300_multi.drop_tip()
-
+    p300_multi.distribute(30, PBS_source, pbs_targets, disposal_volume=10, new_tip='once')
+    protocol.comment(f"PBS added to Column 1 of {len(dest_list)} plates.")
+    
+    p300_multi.distribute(30, A_source, inducer_a_targets, disposal_volume=10, new_tip='once')
+    protocol.comment("Inducer A added to Columns 2 & 4.")
+    
+    p300_multi.distribute(30, B_source, inducer_b_targets, disposal_volume=10, new_tip='once')
+    protocol.comment("Inducer B added to Columns 3 & 4.")
+    
     protocol.comment(f'''Inducer B added to plate (only-B col 3, positive col 4)''')
 
     # destination plate setup -- repeat for the number of replicates (default as 3)
