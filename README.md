@@ -26,32 +26,6 @@ Ensure these are available in your labware directory prior to uploading your pro
 We have used Opentrons API V2.0 at an apiLevel of 2.14 for the Opentrons script.
 <!-- USAGE EXAMPLES -->
 ## Usage
-### Our Experimental Run:
-Users should prepare the reservoir according to their experimental design prior to the start of the Opentrons run. 
-<p align="center">
-   <figure>
-      <img src="./img/labware_layout.png" alt="labware_layout.png" width="400"/>
-<figcaption><b>Figure 1:</b> Opentrons deck layout for a single 2D dose-response matrix assay. Customized labware were used. Two opentrons_96_tiprack_300ul were placed in deck 4 and 7. 4ti0136_96_wellplate_2200ul in deck 5 and 6 were used as the reservoir and source plate respectively. costar3370flatbottomtransparent_96_wellplate_200ul in deck 8 was used as the destination plate.    </figcaption>
-   </figure>
-<br> 
-<figure>
-      <img src="./img/reservoir_layout.png" alt="reservoir_layout.png" width="400"/>
-   <figcaption><b>Figure 2:</b> Reservoir layout for a single 2D dose-response matrix assay. Xylene cyanol was used as mimics for inducer A and B. PBS buffer was used as mimics for the diluent and assay substrate.   
-   </figcaption>
-</figure>
-<figure>
-   <img src="./img/source_plate.png" alt="source plate" width="400"/>
-   <figcaption><b>Figure 3:</b> Source plate layout for a single 2D dose-response matrix assay. A two-fold serial dilution of inducer A was performed from column 8 to 1, resulting in an increasing concentration gradient from column 1 to 8. A two-fold serial dilution of inducer B was performed from well H10 to A10, resulting in an increasing concentration gradient from row A to H. Columns 11 and 12 will be used for inducer B serial dilutions if more replicates are required. 
-   </figcaption>
-</figure>
-
-<figure>
-   <img src="./img/destination_plate.png" alt="destination_plate.png" width="400"/>
-   <figcaption><b>Figure 4:</b> Destination plate layout for a 2D dose-response matrix assay. Columns 1-4 served as the blank and experimental controls. An increase in the concentration of inducer A from columns 5-12 was expected while an increase in concentration of inducer B from rows A to H was expected.
-   </figcaption>
-</figure>
-</p>
-
 ### Execution:
 1. Once the "opentrons" environment has been activated, you can run the below command in any suitable terminal or command line: 
    ```sh
@@ -77,6 +51,38 @@ Distributed under the MIT license. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Our Experimental Run:
+Users should prepare the reservoir according to their experimental design prior to the start of the Opentrons run. 
+<p align="center">
+   <figure>
+      <img src="./img/labware_layout.png" alt="labware_layout.png" width="400"/>
+<figcaption><b>Figure 1:</b> Opentrons deck layout for a single 2D dose-response matrix assay. Customized labware were used. Two opentrons_96_tiprack_300ul were placed in deck 4 and 7. 4ti0136_96_wellplate_2200ul in deck 5 and 6 were used as the reservoir and source plate respectively. costar3370flatbottomtransparent_96_wellplate_200ul in deck 8 was used as the destination plate.    </figcaption>
+   </figure>
+<br> 
+<figure>
+      <img src="./img/reservoir_layout.png" alt="reservoir_layout.png" width="400"/>
+   <figcaption><b>Figure 2:</b> Reservoir layout for a single 2D dose-response matrix assay. Xylene cyanol was used as mimics for inducer A and B. PBS buffer was used as mimics for the diluent and assay substrate.   
+   </figcaption>
+</figure>
+<figure>
+   <img src="./img/source_plate.png" alt="source plate" width="400"/>
+   <figcaption><b>Figure 3:</b> Source plate layout for a single 2D dose-response matrix assay. A two-fold serial dilution of inducer A was performed from column 8 to 1, resulting in an increasing concentration gradient from column 1 to 8. A two-fold serial dilution of inducer B was performed from well H10 to A10, resulting in an increasing concentration gradient from row A to H. Columns 11 and 12 will be used for inducer B serial dilutions if more replicates are required. 
+   </figcaption>
+</figure>
+
+<figure>
+   <img src="./img/destination_plate.png" alt="destination_plate.png" width="400"/>
+   <figcaption><b>Figure 4:</b> Destination plate layout for a 2D dose-response matrix assay. Columns 1-4 served as the blank and experimental controls. An increase in the concentration of inducer A from columns 5-12 was expected while an increase in concentration of inducer B from rows A to H was expected.
+   </figcaption>
+</figure>
+
+<figure>
+   <img src="./img/destination_plate.jpg" alt="destination_plate.jpg" width="400"/>
+   <figcaption><b>Figure 5:</b> Imaged destination plate for a 2D dose-response matrix assay. Columns 1-4 served as the blank and experimental controls. Columns 5-12 were used for sample dyes. An "L-shaped" colouration can be observed for these samples as these have the highest concentration of dye. 
+   </figcaption>
+</figure>
+
+</p>
 <!-- CONTACT -->
 ## Authors
 Code contributed by Agnes Cheung, Daniel Luo, Lihao Tao
