@@ -194,7 +194,6 @@ def run(protocol: protocol_api.ProtocolContext):
     
     ### B. Setup Final Destination Plate
     ## 1. Distribute Reagents (PBS, A, B) to Dest Plates
-    # Using 'distribute' is cleaner than manual loops for simple dispensing
     for dest_plate in dest_plates:
         cols = dest_plate.columns()
         
