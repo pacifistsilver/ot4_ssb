@@ -84,6 +84,7 @@ Users should prepare the reservoir according to their experimental design prior 
 
 </p>
 <!-- CONTACT -->
+
 ## Authors
 Code contributed by Agnes Cheung, Daniel Luo, Lihao Tao
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
