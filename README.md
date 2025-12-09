@@ -25,7 +25,7 @@ Once the "opentrons" environment has been activated, you can run the below comma
    python main.py
    ```
 This will launch the GUI. From here, you can input your parameters and generate a config file for the opentrons protocols
-
+![Demo UI.]([https://myoctocat.com/assets/images/base-octocat.svg](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHh3bWlwcGNtbXg5cXdoaTh5OG10YjVicDdoNjZ0OWQ1ZzAyMTV1cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KTD2jABk6gpax6Tyfs/giphy.gif))
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
