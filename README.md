@@ -79,6 +79,19 @@ Users should prepare the reservoir according to their experimental design prior 
 
 <p align="right">(<a href="#Overview">back to top</a>)</p>
 
+## Issues
+- Be careful with the amount of PBS when the `distribute_pbs()` function is called. In the reservoir plate, columns 5, 6, 7, and 8 are reserved for PBS only. We track the volume removed from these wells, so that we can move to the next well when we get close to the max volume (1200 as set by the `pbs_max_well` constant) Regardless, ensure the wells in these columns are filled well. 
+- There may be issues with air gaps when pipetting highly viscous liquids, so be careful when placing these liquids into the reservoir. If issues are encountered, change the `rate_multiplier` to a lower value if you are still encountering these issues. 
+- When loading the gradient onto the destination plate from the source plate, the volume within the source well may be insufficient due to viscosity issues. We believed this was due to the `well_bottom_clearance` property being set too high, so alter as you so - desire.
+
+## Future Work
+- Allow user to run single inducer assays rather than forced to run a single one. 
+- Automatically handle customised labware.
+- Add testing to ensure functions have the correct behaviour.
+- Pick and specify specific concentrations for each column/well.
+- Pick labware layout GUI.
+- Test functionality with real cells and substrates.
+
 <!-- LICENSE -->
 ## License
 
