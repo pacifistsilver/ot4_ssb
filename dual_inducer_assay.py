@@ -27,8 +27,8 @@ DISP_RATE = config.get("disp_rate")
 BLOW_RATE = config.get("blowout_rate")
 LABWARE = {
     'tips': 'opentrons_96_tiprack_300ul', 
-    'reservoir': '4ti0136_96_wellplate_2200ul', 
-    'plate': 'costar3370flatbottomtransparent_96_wellplate_200ul' 
+    'reservoir': 'axygen_96_wellplate_500ul', 
+    'plate': 'axygen_96_wellplate_500ul' 
 }
 FLOW_RATES = {
     "p300m_asp":  ASP_RATE,
@@ -90,7 +90,12 @@ def distribute_pbs(pipette: protocol_api.InstrumentContext, reservoir: protocol_
     res_cols = [4, 5, 6, 7] # Reservoir columns available for PBS
     current_res_idx = 0
     current_vol_tracker = 0
-    pipette.pick_up_tip()
+    pipette.pick_up_tip()   
+    # each well in the reservoir can only take 2200 microlitres. 
+    # and sometimes less due to inaccurate manual pipetting.
+    # so, we had to keep track of the current volume in the well so that 
+    # we would move to the next one to not run out?
+    # edge case: 3 replicates > would we have enough columns?
 
     for col_idx in target_cols_indices:
         dest = source_plate.columns()[col_idx][0]
@@ -142,8 +147,11 @@ def run(protocol: protocol_api.ProtocolContext):
     res_cell_source = reservoir.wells_by_name()['A4']
     
     # Define flow rates
-    if VISCOUS == True: 
+    # take in viscous boolean value and update pipette settings
+    if VISCOUS == True: # we had issues with inaccurate volumes and air gaps with viscous liquids - > therefore we set slower speeds
         rate_multiplier = RATE_MULTIPLIERS['slow']
+        p300_multi.well_bottom_clearance.aspirate = 0.2
+        p300_single.well_bottom_clearance.aspirate = 0.2
         protocol.comment(f"INFO: Viscosity setting set to True. Rate multiplier set to {rate_multiplier}")
     else: 
         rate_multiplier = RATE_MULTIPLIERS['default']
@@ -157,7 +165,7 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.comment("INFO: Flow rates defined.")
 
     ## 2. Add PBS to source plate to begin serial dilution
-    distribute_pbs(p300_multi, reservoir, source_plate, protocol, FLOW_RATES["asp_vol"], FLOW_RATES["disp_rate"], FLOW_VOL["pbs_max_well"])
+    distribute_pbs(p300_multi, reservoir, source_plate, protocol, FLOW_VOL["asp_vol"], FLOW_VOL["disp_vol"], FLOW_VOL["pbs_max_well"])
     
     ## 3. Add Inducer A and start dilution.
     protocol.comment("INFO: Starting Inducer A dilution.")
@@ -195,6 +203,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     ### B. Setup Final Destination Plate
     ## 1. Distribute Reagents (PBS, A, B) to Dest Plates
+    # add controls and blanks to the destination plate (replicate)
     for dest_plate in dest_plates:
         cols = dest_plate.columns()
         
@@ -207,7 +216,7 @@ def run(protocol: protocol_api.ProtocolContext):
         # Distribute Inducer B to Col 3 & 4
         p300_multi.distribute(30, res_B_source, [cols[2], cols[3]], new_tip='once')
 
-
+    # gradients from step A are transferred to the destination plates
     ## 2. Transfer Gradient A & B and Cells
     for i, dest in enumerate(dest_plates):
         protocol.comment(f"INFO: Transferring Gradient for Plate {i+1}")
