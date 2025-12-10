@@ -72,7 +72,7 @@ current_config = PLATE_LAYOUT[REPLICATES]
 # helper function for liquid moving 
 def move_liquid(pipette: protocol_api.InstrumentContext, aspiration_vol: int, dispense_vol: int, in_location: protocol_api.labware.Well, out_location: protocol_api.labware.Well, rate:float = 1.0, mix_vol:int = 300, mix_reps:int = 0):
     """
-    Helper function for aspirate/dispense with optional mixing and rate control.
+    Helper function for aspirate/dispense with optional mixing and rate control. 
     """
     pipette.aspirate(aspiration_vol, in_location, rate=rate)
     pipette.dispense(dispense_vol, out_location, rate=rate)
