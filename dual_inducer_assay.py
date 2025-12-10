@@ -30,7 +30,6 @@ LABWARE = {
     'reservoir': '4ti0136_96_wellplate_2200ul', 
     'plate': 'costar3370flatbottomtransparent_96_wellplate_200ul' 
 }
-
 FLOW_RATES = {
     "p300m_asp":  ASP_RATE,
     "p300m_disp": DISP_RATE,
@@ -48,7 +47,7 @@ FLOW_VOL = {
     'cell_transfer_high': 70,
     'cell_transfer_low': 40,
 }
-RATES = {
+RATE_MULTIPLIERS = {
     'default': 1.0,
     'slow': 0.5,
 }
@@ -83,7 +82,7 @@ def move_liquid(pipette: protocol_api.InstrumentContext, aspiration_vol: int, di
             pipette.mix(mix_reps, volume_to_mix, out_location)
     pipette.blow_out(out_location.top())
 
-def distribute_pbs(pipette: protocol_api.InstrumentContext, reservoir: protocol_api.labware.Labware, source_plate: protocol_api.labware.Labware, protocol: protocol_api.ProtocolContext, rate:float = 1.0):
+def distribute_pbs(pipette: protocol_api.InstrumentContext, reservoir: protocol_api.labware.Labware, source_plate: protocol_api.labware.Labware, protocol: protocol_api.ProtocolContext, aspiration_vol: int, dispense_vol: int, max_well_vol: int, rate:float = 1.0):
     """Distributes PBS (Diluent) to the Source Plate."""
     target_cols_indices = list(range(0, 8)) + list(range(9, 11))
     
@@ -98,12 +97,12 @@ def distribute_pbs(pipette: protocol_api.InstrumentContext, reservoir: protocol_
         source_well = reservoir.columns()[res_cols[current_res_idx]][0]
         
         # Switch reservoir well if we exceed limit
-        if current_vol_tracker > FLOW_VOL['pbs_max_well']:
+        if current_vol_tracker > max_well_vol:
             current_res_idx += 1
             current_vol_tracker = 0
             source_well = reservoir.columns()[res_cols[current_res_idx]][0]
-        move_liquid(pipette, FLOW_VOL['asp_vol'], FLOW_VOL['disp_vol'],source_well, dest, rate=rate)
-        current_vol_tracker += FLOW_VOL['disp_vol']
+        move_liquid(pipette, aspiration_vol, dispense_vol,source_well, dest, rate=rate)
+        current_vol_tracker += dispense_vol
         
     pipette.drop_tip()
     protocol.comment('INFO: PBS distribution complete')
@@ -144,10 +143,10 @@ def run(protocol: protocol_api.ProtocolContext):
     
     # Define flow rates
     if VISCOUS == True: 
-        rate_multiplier = RATES['slow']
+        rate_multiplier = RATE_MULTIPLIERS['slow']
         protocol.comment(f"INFO: Viscosity setting set to True. Rate multiplier set to {rate_multiplier}")
     else: 
-        rate_multiplier = RATES['default']
+        rate_multiplier = RATE_MULTIPLIERS['default']
         protocol.comment(f"INFO: Viscosity setting set to False. Rate multiplier set to {rate_multiplier}")
     p300_multi.flow_rate.aspirate = FLOW_RATES["p300m_asp"]
     p300_multi.flow_rate.dispense = FLOW_RATES["p300m_disp"]
@@ -158,7 +157,8 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.comment("INFO: Flow rates defined.")
 
     ## 2. Add PBS to source plate to begin serial dilution
-    distribute_pbs(p300_multi, reservoir, source_plate, protocol)
+    distribute_pbs(p300_multi, reservoir, source_plate, protocol, FLOW_RATES["asp_vol"], FLOW_RATES["disp_rate"], FLOW_VOL["pbs_max_well"])
+    
     ## 3. Add Inducer A and start dilution.
     protocol.comment("INFO: Starting Inducer A dilution.")
     p300_multi.pick_up_tip()
@@ -189,6 +189,7 @@ def run(protocol: protocol_api.ProtocolContext):
         p300_single.aspirate(FLOW_VOL['asp_vol'], col[0])
         p300_single.drop_tip()
     protocol.comment(f"INFO: Inducer B dilution complete.")
+    
     if REPLICATES > 3:
         raise ValueError("replicates > 3. Maximum of 3 replicates and minimum of 1 replicate can be executed in each run. PLEASE ENTER AGAIN.")
     
@@ -243,5 +244,6 @@ def run(protocol: protocol_api.ProtocolContext):
             move_liquid(p300_multi, 40, 40, res_cell_source, w, mix_vol=50, mix_reps=3)
             p300_multi.drop_tip()
         protocol.comment(f"INFO: Substrate/Cells added to plate {i} cols 1–12")        
+        
         for cmd in protocol.commands():
             print(cmd)
