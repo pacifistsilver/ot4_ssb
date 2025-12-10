@@ -43,14 +43,6 @@ We have used Opentrons API V2.0 at an apiLevel of 2.14 for the Opentrons script.
 
 <img src="./img/demo.gif" alt="drawing" width="250"/>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT license. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Our Experimental Run:
 Users should prepare the reservoir according to their experimental design prior to the start of the Opentrons run. 
 <p align="center">
@@ -83,6 +75,16 @@ Users should prepare the reservoir according to their experimental design prior 
 </figure>
 
 </p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT license. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 <!-- CONTACT -->
 
 ## Authors
