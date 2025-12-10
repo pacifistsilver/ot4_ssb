@@ -1,3 +1,4 @@
+
 # Automating Dose-Response Experiment Generation using a GUI
 ## Overview
 This protocol enables a customizable and automated setup of a 2D dose-response matrix assay using the Opentrons OT-2 robot. Users can specify concentration ranges, number of replicates (maximum 3 per run), and liquid viscosity in the user interface. User-defined parameters will be translated into the Opentrons script as a configuration. Before the actual run, the reservoir carrying the corresponding components has to be set up manually. The robot will first automatically generate the specified dilution series, then distribute each component combination into the appropriate wells. Pipetting flow rates will be adjusted dynamically according to liquid viscosities to minimise pipetting errors. This provides a flexible and robust platform for investigating combinatorial effects and characterizing logic architectures.  
@@ -24,6 +25,9 @@ This Opentrons script makes use of custom labware definitions:
 Ensure these are available in your labware directory prior to uploading your protocol, otherwise it will fail to analyse. 
 
 We have used Opentrons API V2.0 at an apiLevel of 2.14 for the Opentrons script.
+
+<p align="right">(<a href="#Overview">back to top</a>)</p>
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 ### Execution:
@@ -43,17 +47,8 @@ We have used Opentrons API V2.0 at an apiLevel of 2.14 for the Opentrons script.
 
 <img src="./img/demo.gif" alt="drawing" width="250"/>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT license. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Our Experimental Run:
-Users should prepare the reservoir according to their experimental design prior to the start of the Opentrons run. 
-<p align="center">
+Users should prepare the reservoir according to their experimental design prior to the start of the Opentrons run. In the below run, we set our replicate number to 1. This is what our plate layout looked like:
    <figure>
       <img src="./img/labware_layout.png" alt="labware_layout.png" width="400"/>
 <figcaption><b>Figure 1:</b> Opentrons deck layout for a single 2D dose-response matrix assay. Customized labware were used. Two opentrons_96_tiprack_300ul were placed in deck 4 and 7. 4ti0136_96_wellplate_2200ul in deck 5 and 6 were used as the reservoir and source plate respectively. costar3370flatbottomtransparent_96_wellplate_200ul in deck 8 was used as the destination plate.    </figcaption>
@@ -82,9 +77,18 @@ Users should prepare the reservoir according to their experimental design prior 
    </figcaption>
 </figure>
 
-</p>
+<p align="right">(<a href="#Overview">back to top</a>)</p>
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT license. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#Overview">back to top</a>)</p>
+
+
 <!-- CONTACT -->
 
 ## Authors
 Code contributed by Agnes Cheung, Daniel Luo, Lihao Tao
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Overview">back to top</a>)</p>
