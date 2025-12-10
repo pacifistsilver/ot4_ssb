@@ -25,6 +25,9 @@ This Opentrons script makes use of custom labware definitions:
 Ensure these are available in your labware directory prior to uploading your protocol, otherwise it will fail to analyse. 
 
 We have used Opentrons API V2.0 at an apiLevel of 2.14 for the Opentrons script.
+
+<p align="right">(<a href="#Overview">back to top</a>)</p>
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 ### Execution:
