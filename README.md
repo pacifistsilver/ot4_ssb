@@ -1,3 +1,4 @@
+
 # Automating Dose-Response Experiment Generation using a GUI
 ## Overview
 This protocol enables a customizable and automated setup of a 2D dose-response matrix assay using the Opentrons OT-2 robot. Users can specify concentration ranges, number of replicates (maximum 3 per run), and liquid viscosity in the user interface. User-defined parameters will be translated into the Opentrons script as a configuration. Before the actual run, the reservoir carrying the corresponding components has to be set up manually. The robot will first automatically generate the specified dilution series, then distribute each component combination into the appropriate wells. Pipetting flow rates will be adjusted dynamically according to liquid viscosities to minimise pipetting errors. This provides a flexible and robust platform for investigating combinatorial effects and characterizing logic architectures.  
@@ -75,18 +76,18 @@ Users should prepare the reservoir according to their experimental design prior 
 </figure>
 
 </p>
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Overview">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT license. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Overview">back to top</a>)</p>
 
 
 <!-- CONTACT -->
 
 ## Authors
 Code contributed by Agnes Cheung, Daniel Luo, Lihao Tao
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Overview">back to top</a>)</p>
